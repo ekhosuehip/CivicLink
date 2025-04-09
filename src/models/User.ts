@@ -21,14 +21,17 @@ const userSchema = new Schema<IUser>(
       unique: true,
       trim: true,
     },
-    nin: {
+    position: {
       type: String,
       required: true,
       unique: true,
       trim: true,
-      minlength: 11,
-      maxlength: 11,
     },
+    stateOfOrigin: {
+      type: String,
+      required: true,
+      trim: true,
+    }
   },
   {
     timestamps: true, versionKey: false

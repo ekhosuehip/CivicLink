@@ -1,12 +1,13 @@
 import { Document } from "mongoose";
 
 // This is for incoming user data (from req.body, etc.)
-export interface IUserInput {
+interface IUser extends Document {
   fullName: string;
   email: string;
   phone: string;
-  nin: string;
+  position: string;
+  stateOfOrigin: string
 }
 
 // This is for the full Mongoose document (returned from MongoDB)
-export interface IUser extends Document, IUserInput {}
+export default IUser

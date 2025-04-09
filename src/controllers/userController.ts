@@ -3,18 +3,19 @@ import userService from "../service/userService";
 
 // Register a user
 export const addUser = async (req: Request, res: Response, next: NextFunction) => {
-  const { fullName, email, phone, nin } = req.body;
+  const { fullName, email, phone, position, stateOfOrigin } = req.body;
 
   try {
     // Check if user already exists by email, phone, or NIN
-    const existingUser = await userService.findUserByEmailPhoneNin({ email, phone, nin });
+    const existingUser = await userService.findUserByEmailPhonePosition({ email, phone, position });
 
     if (existingUser) {
-      return res.status(404).json({ message: "User already exists" });
+      res.status(404).json({ message: "User already exists" });
+      return;
     }
 
     // Add new user
-    const newUser = await userService.addUser({ fullName, email, phone, nin });
+    const newUser = await userService.addUser(req.body);
 
     res.status(201).json({ message: "User added successfully", user: newUser });
   } catch (error) {
