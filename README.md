@@ -44,7 +44,6 @@ CivicLink is a collaborative platform aimed at improving civic engagement throug
    ```bash
    git pull origin main
 
-
 ## API Endpoints
 
 GET /api/ping - A simple endpoint to check if the server is running.
