@@ -1,11 +1,5 @@
-import mongoose, { Document, Schema, Model } from 'mongoose';
-
-export interface IUser extends Document {
-  fullName: string;
-  email: string;
-  phone: string;
-  nin: string;
-}
+import mongoose, {  Schema, Model } from 'mongoose';
+import IUser from '../interfaces/Users';
 
 const userSchema = new Schema<IUser>(
   {
@@ -37,7 +31,7 @@ const userSchema = new Schema<IUser>(
     },
   },
   {
-    timestamps: true,
+    timestamps: true, versionKey: false
   }
 );
 
