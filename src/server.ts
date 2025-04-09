@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors"
 import config from './config/config';
+import userRouter from "./routes/userRoutes";
 
 
 const app = express();
@@ -20,6 +21,8 @@ app.use(express.urlencoded({ extended: false }));
 
 // Server check
 app.use("/api/ping", (req, res) => {res.status(200).json({message: 'pong'})})
+
+app.use("/api/user", userRouter)
 
 // 404 Handler 
 app.use((req, res) => {
