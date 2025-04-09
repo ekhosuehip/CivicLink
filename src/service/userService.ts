@@ -8,10 +8,6 @@ class Service {
         return await User.create(data)
     }
 
-    // Get user
-    async getUser (_id: string) {
-        return await User.findById(_id)
-    }
 }
 
 const userService = new Service

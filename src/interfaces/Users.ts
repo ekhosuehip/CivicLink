@@ -1,4 +1,4 @@
-import mongoose, { Document} from "mongoose";
+import { Document} from "mongoose";
 
 interface IUser extends Document {
     fullName: string;
@@ -7,4 +7,4 @@ interface IUser extends Document {
     nin: string;
   }
 
-  export default IUser
+export default IUser
