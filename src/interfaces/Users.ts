@@ -1,12 +1,21 @@
 import { Document } from "mongoose";
+import { JwtPayload } from "jsonwebtoken";
 
-interface IUser extends Document {
+export interface IUser extends Document {
   fullName: string;
   email: string;
   phone: string;
-  position?: string; 
+  password: string;
   stateOfOrigin: string;
-  category: "citizen" | "official";
 }
 
-export default IUser;
+export interface IAuthPayload {
+  userId: string,
+  email: string
+}
+
+export interface DecodedUser extends JwtPayload {
+  userId: string;
+  email: string;
+}
+

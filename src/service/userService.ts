@@ -1,27 +1,28 @@
-import User from "../models/User";
-import IUser from "../interfaces/Users";
+import Citizens from "../models/User";
+import {IUser} from "../interfaces/Users";
 
 class Service {
   // Use IUserInput for plain input from controller
   async addUser(data: IUser) {
-    return await User.create(data);
+    return await Citizens.create(data);
   }
 
-  async getUserByCategory() {
-    return await User.find({ category: 'official' });
-  }
 
   async getUser() {
-    return await User.find();
+    return await Citizens.find();
   }
 
-  // Check if user exists by email, phone, or NIN
-  async findUserByEmailPhonePosition({ email, phone, position }: { email: string; phone: string; position: string }) {
-    return await User.findOne({
-      $or: [{ email }, { phone }, { position }],
+  // Check if user exists by email, phone
+  async findUserByEmailPhone({ email, phone }: { email: string; phone: string }) {
+    return await Citizens.findOne({
+      $or: [{ email }, { phone }],
     });
   }
+
+  async deleteUser(id: string) {
+    return await Citizens.findByIdAndDelete(id)
+}
 }
 
-const userService = new Service();
-export default userService;
+const citizenService = new Service();
+export default citizenService;

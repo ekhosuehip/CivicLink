@@ -18,7 +18,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 
-
 // Server check
 app.use("/api/ping", (req, res) => {res.status(200).json({message: 'pong'})})
 

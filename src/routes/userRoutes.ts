@@ -1,13 +1,15 @@
 import { Router } from 'express';
-import {addUser, getOfficials, getUser} from '../controllers/userController'
-import schema from '../middlewares/joiSchema';
+import {registerUser, registerOfficial, signIn, getUser, deleteUser} from '../controllers/userController'
+import {signUpSchema, signInSchema} from '../middlewares/joiSchema';
 import { validate } from '../middlewares/joiValidator';
 
 const router = Router();
 
 router.get('/get/', getUser)
-router.get('/get/officials', getOfficials)
-router.post('/add', validate(schema.singUp), addUser)
+router.post('/register/official', validate(signUpSchema), registerUser);
+router.post('/register/citizen', validate(signUpSchema), registerUser);
+router.post("/login",validate(signInSchema), signIn);
+router.delete('/delete', deleteUser)
 
 
 export default router

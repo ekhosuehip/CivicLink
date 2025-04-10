@@ -1,7 +1,8 @@
-import mongoose, { Schema, Model } from 'mongoose';
-import IUser from '../interfaces/Users';
+import { IUser } from "../interfaces/Users"
+import mongoose, { Schema } from 'mongoose';
 
-const userSchema = new Schema<IUser>(
+
+const citizenSchema = new Schema<IUser>(
   {
     fullName: {
       type: String,
@@ -21,21 +22,14 @@ const userSchema = new Schema<IUser>(
       unique: true,
       trim: true,
     },
-    category: {
+    password: {
       type: String,
       required: true,
-      enum: ['citizen', 'official'],
-    },
-    position: {
-      type: String,
       trim: true,
-      required: function (this: IUser) {
-        return this.category === 'official';
-      },
     },
     stateOfOrigin: {
       type: String,
-      required: true,
+      required: true,                                                        
       trim: true,
     }
   },
@@ -45,5 +39,5 @@ const userSchema = new Schema<IUser>(
   }
 );
 
-const User: Model<IUser> = mongoose.model<IUser>('User', userSchema);
-export default User;
+const Citizens = mongoose.model<IUser>('Citizen', citizenSchema);
+export default Citizens;
