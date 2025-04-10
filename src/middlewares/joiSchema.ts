@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import IUser from '../interfaces/Users';
+import IUser from "../interfaces/Users";
 
 const schema = {
     singUp: Joi.object<IUser>({
@@ -10,5 +10,4 @@ const schema = {
         stateOfOrigin: Joi.string().min(2),
     }),
 };
-
-export default schema
+export default schema;

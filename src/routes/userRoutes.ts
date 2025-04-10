@@ -5,6 +5,6 @@ import { validate } from '../middlewares/joiValidator';
 
 const router = Router();
 
-router.post('/add', validate(schema.singUp), addUser)
+router.post('/user', validate(schema.singUp), addUser)
 
 export default router
