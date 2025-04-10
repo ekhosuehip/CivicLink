@@ -1,5 +1,6 @@
+
 import { NextFunction, Request, Response } from 'express';
-import { ObjectSchema } from 'joi';
+import Joi, { ObjectSchema } from 'joi';
 
 // Custom middleware for validating request body
 export function validate<T>(schema: ObjectSchema<T>) {
@@ -8,15 +9,13 @@ export function validate<T>(schema: ObjectSchema<T>) {
       const { error, value } = schema.validate(req.body, { abortEarly: false });
 
       if (error) {
-        res.status(400).json({ error: error.details[0].message });
-        return;
+        return res.status(400).json({ error: error.details[0].message });
       }
 
       req.body = value; 
       next();
     } catch (err) {
-      res.status(500).json({ error: 'Internal Server Error' });
-      return;
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
   };
 }

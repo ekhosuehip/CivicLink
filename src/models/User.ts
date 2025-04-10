@@ -1,5 +1,5 @@
-import mongoose, { Schema, Model } from 'mongoose';
-import IUser from '../interfaces/Users';
+import mongoose, {  Schema, Model } from 'mongoose';
+import IUser from "../interfaces/Users";
 
 const userSchema = new Schema<IUser>(
   {
@@ -21,17 +21,11 @@ const userSchema = new Schema<IUser>(
       unique: true,
       trim: true,
     },
-    category: {
-      type: String,
-      required: true,
-      enum: ['citizen', 'official'],
-    },
     position: {
       type: String,
+      required: true,
+      unique: true,
       trim: true,
-      required: function (this: IUser) {
-        return this.category === 'official';
-      },
     },
     stateOfOrigin: {
       type: String,
@@ -40,8 +34,7 @@ const userSchema = new Schema<IUser>(
     }
   },
   {
-    timestamps: true,
-    versionKey: false,
+    timestamps: true, versionKey: false
   }
 );
 
