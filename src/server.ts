@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 // Server check
 app.use("/api/ping", (req, res) => {res.status(200).json({message: 'pong'})})
 
-app.use("/api/user", userRouter)
+app.use("/api/v1", userRouter)
 
 // 404 Handler 
 app.use((req, res) => {

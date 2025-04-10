@@ -46,6 +46,15 @@ CivicLink is a collaborative platform aimed at improving civic engagement throug
 
 ## API Endpoints
 
+Base URL: /api/v1
+
 GET /api/ping - A simple endpoint to check if the server is running.
 
+Register Citizen
+POST /api/v1/register/citizen
 
+Register Official
+POST /api/v1/register/official
+
+Login
+POST /api/v1/login
