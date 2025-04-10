@@ -1,4 +1,4 @@
-import mongoose, {  Schema, Model } from 'mongoose';
+import mongoose, { Schema, Model } from 'mongoose';
 import IUser from '../interfaces/Users';
 
 const userSchema = new Schema<IUser>(
@@ -21,11 +21,17 @@ const userSchema = new Schema<IUser>(
       unique: true,
       trim: true,
     },
-    position: {
+    category: {
       type: String,
       required: true,
-      unique: true,
+      enum: ['citizen', 'official'],
+    },
+    position: {
+      type: String,
       trim: true,
+      required: function (this: IUser) {
+        return this.category === 'official';
+      },
     },
     stateOfOrigin: {
       type: String,
@@ -34,7 +40,8 @@ const userSchema = new Schema<IUser>(
     }
   },
   {
-    timestamps: true, versionKey: false
+    timestamps: true,
+    versionKey: false,
   }
 );
 
