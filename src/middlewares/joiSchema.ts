@@ -26,6 +26,7 @@ export const officialSchema = Joi.object<IOfficial>({
       'string.pattern.base': 'Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character.',
     }),
   jurisdiction: Joi.string().valid('federal', 'state', 'local').required(),
+  position: Joi.string().min(2).required(),
   stateOfOrigin: Joi.string().min(2).required(),
 });
 
