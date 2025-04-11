@@ -4,7 +4,9 @@ CivicLink is a collaborative platform aimed at improving civic engagement throug
 
 ## Features
 
-
+## Deployment
+The API is live and can be accessed here:
+🔗 [Civic API](https://civiclink-iq2l.onrender.com)
 
 ## Technologies Used
 
