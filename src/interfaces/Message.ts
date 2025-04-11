@@ -1,11 +1,12 @@
-import { Document, Types } from 'mongoose';
+import { Document, Types } from "mongoose";
+import { IUser } from "./Users";
+import { IChat } from "./Chat";
 
 export interface IMessage extends Document {
-  senderID: Types.ObjectId; 
-  receiverID: Types.ObjectId;
+  sender: Types.ObjectId | IUser;
   content: string;
-  sentAt: Date;
-  status: 'sent' | 'delivered' | 'read';
-  deliveredAt?: Date | null;
-  readAt?: Date | null;
+  chat: Types.ObjectId | IChat;
+  readBy: Types.Array<Types.ObjectId | IUser>;
+  createdAt: Date;
+  updatedAt: Date;
 }

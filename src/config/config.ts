@@ -4,7 +4,7 @@ dotenv.config();
 
 const DATABASE_URL = process.env.MONGODB
 
-const SERVER_PORT = process.env.PORT || 3000;
+const SERVER_PORT = process.env.PORT || 5000;
 
 const config = {
     mongo: {

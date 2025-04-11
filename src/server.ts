@@ -2,7 +2,11 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors"
 import config from './config/config';
+import cookieParser from 'cookie-parser';
 import userRouter from "./routes/userRoutes";
+import chatRouter from './routes/chatRoutes'
+
+
 
 
 const app = express();
@@ -15,6 +19,7 @@ mongoose.connect(config.mongo.url as string)
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 
 
@@ -22,6 +27,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/api/ping", (req, res) => {res.status(200).json({message: 'pong'})})
 
 app.use("/api/v1", userRouter)
+app.use("/api/v2", chatRouter)
 
 // 404 Handler 
 app.use((req, res) => {

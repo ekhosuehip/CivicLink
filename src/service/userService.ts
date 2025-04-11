@@ -19,6 +19,33 @@ class Service {
     });
   }
 
+  // Get citizen by name or email
+  async getByNameOrEmail(query: {
+  fullName?: string;
+  email?: string;
+  userId: string;
+      }) {
+          const filters: any[] = [];
+
+          if (query.fullName) {
+              filters.push({ fullName: { $regex: query.fullName, $options: "i" } });
+          }
+
+          if (query.email) {
+              filters.push({ email: { $regex: query.email, $options: "i" } });
+          }
+
+          if (query.userId) {
+              filters.push({ _id: { $ne: query.userId } });  // Exclude the user with the provided _id
+          }
+
+          if (filters.length === 0) {
+              return []; 
+          }
+
+          return await Citizens.find({ $or: filters });
+      }
+
   async deleteUser(id: string) {
     return await Citizens.findByIdAndDelete(id)
 }

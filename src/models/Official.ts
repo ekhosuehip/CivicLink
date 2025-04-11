@@ -1,17 +1,16 @@
-import mongoose, { Schema  } from 'mongoose';
-import {IOfficial} from '../interfaces/Oficial'
+import mongoose, { Schema } from 'mongoose';
+import User from './User';
+import { IUser } from '../interfaces/Oficial';
 
+interface IOfficial extends IUser {
+  position: string;
+  jurisdiction: string;
+}
 
 const officialSchema = new Schema<IOfficial>({
-    fullName: { type: String, required: true, trim: true, },
-    email: { type: String, required: true, unique: true, trim: true, },
-    phone: { type: String, required: true, unique: true, trim: true, },
-    password: { type: String, required: true, trim: true, },
-    position: { type: String, required: true, trim: true, },
-    jurisdiction: { type: String, required: true, trim: true, },
-    stateOfOrigin: { type: String, required: true, trim: true, }
-  }, { timestamps: true });
-  
+  position: { type: String, required: true, trim: true },
+  jurisdiction: { type: String, required: true, trim: true },
+}, { timestamps: true, versionKey: false });
 
-const Official = mongoose.model<IOfficial>('Official', officialSchema);
-export default Official
+const Official = User.discriminator<IOfficial>('Official', officialSchema);
+export default Official;

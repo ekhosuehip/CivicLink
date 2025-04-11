@@ -46,7 +46,8 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
     }).status(201).json({
         success: true,
         Message: 'User registered successfull',
-        token: token
+        token: token,
+        data: newUser
     });
 
   } catch (error) {
@@ -91,7 +92,8 @@ export const registerOfficial = async (req: Request, res: Response, next: NextFu
     }).status(201).json({
         success: true,
         Message: 'User registered successfull',
-        token: token
+        token: token,
+        data: newUser
     });
 
   } catch (error) {
@@ -109,25 +111,19 @@ export const signIn = async (req: Request, res: Response, next: NextFunction) =>
   
   try {
       // Check if user already exists by email, phone
-      let existingUser = await citizenService.findUserByEmailPhone({ email, phone });
+      const existingUser = await citizenService.findUserByEmailPhone({ email, phone });
 
       if (!existingUser) {
-          // Step 2: Check Official collection if no User found
-          const existingOfficial = await officialService.findUserByEmailPhone({ email, phone });
-          if (existingOfficial) {
-              existingUser = existingOfficial;  
-          } else{
-            res.status(401).json({
-              success: false,
-              message: 'Incorrect email or phone number'
-          });
-          return
-          }
+        res.status(401).json({
+          success: false,
+          message: 'Incorrect email or phone number'
+      });
+      return;
       }
 
       const userIdString = (existingUser!._id as ObjectId).toString();
       console.log(userIdString);
-      const storedHashedPassword = existingUser.password;
+      const storedHashedPassword = existingUser!.password;
       console.log("Here")
       console.log(storedHashedPassword);
       
@@ -139,7 +135,7 @@ export const signIn = async (req: Request, res: Response, next: NextFunction) =>
               success: false,
               message: 'Incorrect email or password'
           });
-          return
+        return
       }
 
       // Generate JWT
@@ -162,53 +158,83 @@ export const signIn = async (req: Request, res: Response, next: NextFunction) =>
       return
       
   } catch (error) {
-      res.status(500).json({
-          success: false,
-          message: 'Internal server error'
-      });
-      return  
-  }
-  
-}
-
-// export const getOfficials = async (req: Request, res: Response, next: NextFunction) => {
-
-//   try {
-
-//     const officials = await userService.getUserByCategory()
-//     res.status(200).json({
-//       success: true,
-//       message: 'Officials fetched successfully',
-//       data: officials
-//     });
-//     return
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       message: 'Internal server error'
-//     })
-//   }
-// }
-
-export const getUser = async (req: Request, res: Response, next: NextFunction) => {
-
-  try {
-    
-    const users = await citizenService.getUser()
-    res.status(200).json({
-      success: true,
-      message: 'Users fetched successfully',
-      data: users
-    });
-    return
-  } catch (error) {
     res.status(500).json({
-      success: false,
-      message: 'Internal server error'
-    })
+        success: false,
+        message: 'Internal server error'
+    });
+    return  
+  } 
+}
+
+// Get officials by filter
+export const getByNameJurisdictionOrPosition = async (req: Request, res: Response) => {
+  const { fullName, jurisdiction, position } = req.query as {
+          fullName?: string;
+          jurisdiction?: string;
+          position?: string;
+      };
+  try {
+      const {userId} = req.body;
+      console.log(`id is working ${userId}`);
+      const officials = await officialService.getByNameJurisdictionOrPosition({
+          fullName,
+          jurisdiction,
+          position,
+          userId
+      });
+
+      if (officials.length > 0) {
+          res.status(200).json(officials);
+          console.log("found");
+          
+          return;
+      } else {
+          res.status(404).json({ message: 'No officials found matching the criteria' });
+          return;
+      }
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error retrieving officials', error });
+      return;
   }
 }
 
+// Get all citizens
+export const getUser = async (req: Request, res: Response, next: NextFunction) => {
+  const { fullName, email } = req.query as {
+          fullName?: string;
+          email?: string;
+       
+      };
+  try {
+      const userId = req.body.userId;
+      console.log(`id is working ${userId}`);
+      
+      
+      const officials = await citizenService.getByNameOrEmail({
+          fullName,
+          email,
+          userId
+      });
+
+
+      if (officials.length > 0) {
+          res.status(200).json(officials);
+          console.log("found");
+          
+          return;
+      } else {
+          res.status(404).json({ message: 'No citizen found matching the criteria' });
+          return;
+      }
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error retrieving citizen', error });
+      return;
+  }
+}
+
+// Delete citizen
 export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   const id = req.body.id;
   console.log(req.body);
@@ -229,3 +255,8 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
     })
   }
 }
+
+// Logout
+export const logoutUser = (req: Request, res: Response) => {
+  res.clearCookie("token").json({ message: "Logout successful." });
+};
