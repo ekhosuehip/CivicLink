@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import bcrypt from "bcryptjs";
 import { Request, Response, NextFunction } from "express";
+import { AuthenticatedRequest } from "../middlewares/authMiddleware";
 import citizenService from '../service/userService';
 import officialService from '../service/officialService';
 import { IAuthPayload } from "../interfaces/Users";
@@ -167,14 +168,16 @@ export const signIn = async (req: Request, res: Response, next: NextFunction) =>
 }
 
 // Get officials by filter
-export const getByNameJurisdictionOrPosition = async (req: Request, res: Response) => {
+export const getByNameJurisdictionOrPosition = async (req: AuthenticatedRequest, res: Response) => {
   const { fullName, jurisdiction, position } = req.query as {
           fullName?: string;
           jurisdiction?: string;
           position?: string;
       };
   try {
-      const {userId} = req.body;
+      const userId = req.user!.userId;
+      console.log("useri",userId);
+      
       console.log(`id is working ${userId}`);
       const officials = await officialService.getByNameJurisdictionOrPosition({
           fullName,
@@ -184,30 +187,37 @@ export const getByNameJurisdictionOrPosition = async (req: Request, res: Respons
       });
 
       if (officials.length > 0) {
-          res.status(200).json(officials);
+          res.status(200).json({
+            success: true,
+            data: officials
+          });
           console.log("found");
           
           return;
       } else {
-          res.status(404).json({ message: 'No officials found matching the criteria' });
+          res.status(404).json({ 
+            success: false,
+            message: 'No officials found matching the criteria' });
           return;
       }
   } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Error retrieving officials', error });
+      res.status(500).json({ 
+        success: false,
+        message: 'Error retrieving officials', error });
       return;
   }
 }
 
 // Get all citizens
-export const getUser = async (req: Request, res: Response, next: NextFunction) => {
+export const getUser = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   const { fullName, email } = req.query as {
           fullName?: string;
           email?: string;
        
       };
   try {
-      const userId = req.body.userId;
+      const userId = req.user!.userId;
       console.log(`id is working ${userId}`);
       
       
@@ -219,17 +229,24 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
 
 
       if (officials.length > 0) {
-          res.status(200).json(officials);
+          res.status(200).json({
+            success: true,
+            data: officials
+          });
           console.log("found");
           
           return;
       } else {
-          res.status(404).json({ message: 'No citizen found matching the criteria' });
+          res.status(404).json({ 
+            success: false,
+            message: 'No citizen found matching the criteria' });
           return;
       }
   } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Error retrieving citizen', error });
+      res.status(500).json({ 
+        success: false,
+        message: 'Error retrieving citizen', error });
       return;
   }
 }

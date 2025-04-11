@@ -1,7 +1,5 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import Chat from "../models/Chat";
-import Citizen from "../models/User";
-import Official from "../models/Official";
 import { AuthenticatedRequest } from "../middlewares/authMiddleware";
 
 export const accessChat = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
@@ -10,7 +8,9 @@ export const accessChat = async (req: AuthenticatedRequest, res: Response, next:
   // Ensure receiverId is present
   if (!receiverId) {
     console.log("Receiver param not sent with request");
-    res.status(400).send({ message: "Receiver ID is required" });
+    res.status(400).send({ 
+        success: false,
+        message: "Receiver ID is required" });
     return;
   }
 
@@ -37,7 +37,10 @@ export const accessChat = async (req: AuthenticatedRequest, res: Response, next:
         path: "latestMessage.sender",
         select: "fullName pic email", 
       });
-      res.status(200).json(isChat[0]);
+      res.status(200).json({
+        success: true,
+        Chat: isChat[0]
+        });
       return;
     }
 
@@ -60,11 +63,16 @@ export const accessChat = async (req: AuthenticatedRequest, res: Response, next:
       select: "fullName pic email",
     });
 
-   res.status(200).json(newChat);
+    res.status(200).json({
+        success: true,
+        chat: newChat
+    });
    return;
   } catch (error) {
     console.error(error);
-    res.status(500).send({ message: "Error creating or fetching chat", error: error });
+    res.status(500).send({ 
+        success: false,
+        message: "Error creating or fetching chat", error: error });
     return
   }
 };
@@ -84,12 +92,17 @@ export const fetchChat = async (req: AuthenticatedRequest, res: Response, next: 
       select: "fullName pic email",
     });
 
-    res.status(200).json(populatedChats);
+    res.status(200).json({
+        success: true,
+        Chats: populatedChats
+    });
     return;
 
   } catch (error) {
     console.error(error);
-    res.status(500).send({ message: "Error fetching chats", error: error });
+    res.status(500).send({ 
+        success: false,
+        message: "Error fetching chats", error: error });
     return;
   }
 };
@@ -116,7 +129,7 @@ export const createGroup = async (req: AuthenticatedRequest, res: Response, next
   try {
     const groupChat = await Chat.create({
       chatName: req.body.name,
-      users: JSON.parse(req.body.users), // already ObjectIds in string form
+      users: JSON.parse(req.body.users),
       groupAdmin: req.user?.userId, 
       isGroupChat: true,
 

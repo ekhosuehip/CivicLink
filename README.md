@@ -51,6 +51,7 @@ CivicLink is a collaborative platform aimed at improving civic engagement throug
 
 - **User Routes**: `/api/v1`
 - **Chat Routes**: `/api/v2`
+- **Message Routes**: `/api/v3`
 
 ### Health Check
 
@@ -77,4 +78,9 @@ CivicLink is a collaborative platform aimed at improving civic engagement throug
 - **Rename Group Chat**: `PUT /api/v2/rename`
 - **Add User to Group**: `PUT /api/v2/add`
 - **Remove User from Group**: `PUT /api/v2/remove`
+
+### Messages Features *(Protected Routes)*
+
+- **Send a Message**: `POST /api/v3/`
+- **Get All Messages in a Chat**: `/api/v3/:chatId `
 
