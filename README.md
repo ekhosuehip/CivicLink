@@ -66,7 +66,7 @@ The API is live and can be accessed here:
 - **Login**: `POST /api/v1/login`
 - **Logout**: `POST /api/v1/logout`
 
-### User Info
+### User Info *(Protected Routes)*
 
 - **Get Citizen Info**: `GET /api/v1/citizen`
 
