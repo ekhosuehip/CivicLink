@@ -57,7 +57,7 @@ The API is live and can be accessed here:
 
 ### Health Check
 
-- `GET /api/v1/ping` — A simple endpoint to check if the server is running.
+- `GET /api/ping` — A simple endpoint to check if the server is running.
 
 ### Authentication & User Management
 
