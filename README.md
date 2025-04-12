@@ -2,20 +2,23 @@
 
 CivicLink is a collaborative platform aimed at improving civic engagement through technology. This repository contains the source code for the project.
 
-## Features
-
 ## Deployment
 The API is live and can be accessed here:
 🔗 [Civic API](https://civiclink-iq2l.onrender.com)
 
-## Technologies Used
+## **Features**
+- Real-time messaging with **Socket.io**
+- Chat management for one-on-one and group chats
+- User authentication and management
+- Messaging system with chat history
 
+## **Technologies Used**
 - **Express.js** for building the API.
 - **MongoDB** for storing notes and user data.
 - **Mongoose** for object modeling and schema definition.
 - **TypeScript** for type safety and better maintainability.
-
-## Setup
+- **Socket.io** for real-time communication (messaging and typing indicators).
+- **JWT** for user authentication.
 
 ### Prerequisites
 
