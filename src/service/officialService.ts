@@ -51,6 +51,32 @@ class OfficialService {
 
             return await Official.find({ $or: filters });
         }
+
+    async getWithoutAuth(query: {
+    fullName?: string;
+    jurisdiction?: string;
+    position?: string;
+        }) {
+            const filters: any[] = [];
+
+            if (query.fullName) {
+                filters.push({ fullName: { $regex: query.fullName, $options: "i" } });
+            }
+
+            if (query.jurisdiction) {
+                filters.push({ jurisdiction: { $regex: query.jurisdiction, $options: "i" } });
+            }
+
+            if (query.position) {
+                filters.push({ position: { $regex: query.position, $options: "i" } });
+            }
+
+            if (filters.length === 0) {
+                return []; 
+            }
+
+            return await Official.find({ $or: filters });
+        }
 }
 
 const officialService = new OfficialService();

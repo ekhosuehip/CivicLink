@@ -168,7 +168,7 @@ export const signIn = async (req: Request, res: Response, next: NextFunction) =>
 }
 
 // Get officials by filter
-export const getByNameJurisdictionOrPosition = async (req: AuthenticatedRequest, res: Response) => {
+export const getByNameJurisdictionOrPosition = async (req: AuthenticatedRequest, res: Response,  next: NextFunction) => {
   const { fullName, jurisdiction, position } = req.query as {
           fullName?: string;
           jurisdiction?: string;
@@ -277,3 +277,71 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
 export const logoutUser = (req: Request, res: Response) => {
   res.clearCookie("token").json({ message: "Logout successful." });
 };
+
+// Get officials by filter without auth
+export const getOfficialWithoutAuth = async (req: Request, res: Response, next: NextFunction) => {
+  const { fullName, jurisdiction, position } = req.query as {
+          fullName?: string;
+          jurisdiction?: string;
+          position?: string;
+      };
+  try {
+
+      const officials = await officialService.getWithoutAuth({
+          fullName,
+          jurisdiction,
+          position,
+      });
+
+      if (officials.length > 0) {
+          res.status(200).json({
+            success: true,
+            data: officials
+          });
+          console.log("found");
+          
+          return;
+      } else {
+          res.status(404).json({ 
+            success: false,
+            message: 'No officials found matching the criteria' });
+          return;
+      }
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ 
+        success: false,
+        message: 'Error retrieving officials', error });
+      return;
+  }
+}
+
+// Get All officials without auth
+export const getAllOfficialWithoutAuth = async (req: Request, res: Response, next: NextFunction) => {
+
+  try {
+
+      const officials = await officialService.getAllOfficials()
+
+      if (officials.length > 0) {
+          res.status(200).json({
+            success: true,
+            data: officials
+          });
+          console.log("found");
+          
+          return;
+      } else {
+          res.status(404).json({ 
+            success: false,
+            message: 'No officials found matching the criteria' });
+          return;
+      }
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ 
+        success: false,
+        message: 'Error retrieving officials', error });
+      return;
+  }
+}
