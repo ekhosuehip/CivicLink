@@ -7,6 +7,11 @@ class Service {
     return await Citizens.create(data);
   }
 
+  // Get all citizen
+    async getAllCitizen() {
+        return await Citizens.find()
+    }
+
   // Check if user exists by email, phone
   async findUserByEmailPhone({ email, phone }: { email: string; phone: string }) {
     return await Citizens.findOne({

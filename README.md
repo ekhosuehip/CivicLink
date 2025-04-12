@@ -70,7 +70,11 @@ The API is live and can be accessed here:
 
 - **Get Citizen Info**: `GET /api/v1/citizen`
 
-- **Get Official by Name, Jurisdiction, or Position**: `GET /api/v1/official` 
+- **Get Official by Name, Jurisdiction, or Position**: `GET /api/v1/official`
+
+### Admin Routes (Auth Token Required)
+- **Get All Officials**: `GET /api/v1/admin/officials/:authToken`
+- **Get Official by serch**: `GET /api/v1/admin/official/:authToken`
 
 ### Chat Features *(Protected Routes)*
 

@@ -7,9 +7,11 @@ import officialService from '../service/officialService';
 import { IAuthPayload } from "../interfaces/Users";
 import { ObjectId } from "mongoose";
 import jwt from "jsonwebtoken";
+import Citizen from '../models/User';
 
 dotenv.config();
 
+const webtoken = process.env.AUTH_TOKEN
 const saltRounds = 10;
 // Register a user
 export const registerUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -209,7 +211,7 @@ export const getByNameJurisdictionOrPosition = async (req: AuthenticatedRequest,
   }
 }
 
-// Get all citizens
+// Get citizens by filter
 export const getUser = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   const { fullName, email } = req.query as {
           fullName?: string;
@@ -278,13 +280,54 @@ export const logoutUser = (req: Request, res: Response) => {
   res.clearCookie("token").json({ message: "Logout successful." });
 };
 
-// Get officials by filter without auth
-export const getOfficialWithoutAuth = async (req: Request, res: Response, next: NextFunction) => {
+
+// get all officials
+export const getAllOfficial = async (req: Request, res: Response, next: NextFunction) => {
+  
+  try {
+
+      const officials = await officialService.getAllOfficials()
+
+      if (officials.length > 0) {
+          res.status(200).json({
+            success: true,
+            data: officials
+          });
+          console.log("found");
+          
+          return;
+      } else {
+          res.status(404).json({ 
+            success: false,
+            message: 'No officials found matching the criteria' });
+          return;
+      }
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ 
+        success: false,
+        message: 'Error retrieving officials', error });
+      return;
+  }
+}
+
+// Get officials by filter with token
+export const getOfficialWithToken = async (req: Request, res: Response, next: NextFunction) => {
   const { fullName, jurisdiction, position } = req.query as {
           fullName?: string;
           jurisdiction?: string;
           position?: string;
       };
+
+  const authToken = req.params.authToken
+  console.log(authToken);
+  console.log("Here");
+  
+  
+  if (authToken != webtoken){
+    res.send(404).json({success: false, message: "Token needed"})
+    return;
+  }
   try {
 
       const officials = await officialService.getWithoutAuth({
@@ -316,9 +359,19 @@ export const getOfficialWithoutAuth = async (req: Request, res: Response, next: 
   }
 }
 
-// Get All officials without auth
-export const getAllOfficialWithoutAuth = async (req: Request, res: Response, next: NextFunction) => {
+// Get All officials with token
+export const getAllOfficialWithToken = async (req: Request, res: Response, next: NextFunction) => {
+  console.log(req.params);
 
+  const authToken = req.params.authToken
+  console.log(authToken);
+  console.log("here now");
+  
+  
+  if (authToken != webtoken){
+    res.send(404).json({success: false, message: "Token needed"})
+    return;
+  }
   try {
 
       const officials = await officialService.getAllOfficials()
