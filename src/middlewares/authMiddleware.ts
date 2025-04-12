@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 
 dotenv.config();
 
+// This middleware function checks if the request has a valid JWT token in the cookies or the authorization header.
 export interface AuthenticatedRequest extends Request {
   user?: DecodedUser;
 }
