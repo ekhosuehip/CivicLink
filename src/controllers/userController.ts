@@ -321,11 +321,9 @@ export const getOfficialWithToken = async (req: Request, res: Response, next: Ne
 
   const authToken = req.params.authToken
   console.log(authToken);
-  console.log("Here");
-  
-  
+
   if (authToken != webtoken){
-    res.send(404).json({success: false, message: "Token needed"})
+    res.status(404).json({success: false, message: "Token needed"})
     return;
   }
   try {
@@ -367,13 +365,17 @@ export const getAllOfficialWithToken = async (req: Request, res: Response, next:
   console.log(authToken);
   console.log("here now");
   
-  
-  if (authToken != webtoken){
-    res.send(404).json({success: false, message: "Token needed"})
-    return;
-  }
   try {
 
+      if (authToken != webtoken){
+        console.log("current");
+        
+        res.status(404).json({success: false, message: "Invalid token"})
+        console.log("curently");
+    
+        return;
+  }
+      console.log("test");
       const officials = await officialService.getAllOfficials()
 
       if (officials.length > 0) {
