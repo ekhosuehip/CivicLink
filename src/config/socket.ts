@@ -24,7 +24,7 @@ export const initSocket = (server: http.Server) => {
   const io = new Server(server, {
     pingTimeout: 60000,
     cors: {
-      origin: process.env.PORT || "http://localhost:5000",
+      origin: process.env.PORT || "http://localhost:5173",
       credentials: true,
     },
   });
