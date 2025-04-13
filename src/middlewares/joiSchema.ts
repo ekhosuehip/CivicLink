@@ -2,6 +2,8 @@ import Joi from 'joi';
 import {IUser} from '../interfaces/Users';
 import { IOfficial } from '../interfaces/Oficial';
 
+
+// This schema is used to validate the data for user registration and login.
 export const signUpSchema = Joi.object<IUser>({
   fullName: Joi.string().min(1).required(),
   email: Joi.string().email({ minDomainSegments: 2 }).required(),

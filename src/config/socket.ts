@@ -28,7 +28,7 @@ export const initSocket = (server: http.Server) => {
       credentials: true,
     },
   });
-
+//Socket.io connection eventgi
   io.on("connection", (socket: Socket) => {
     console.log("🟢 New Socket Connected:", socket.id);
 
@@ -44,7 +44,7 @@ export const initSocket = (server: http.Server) => {
       socket.join(roomId);
       console.log(`💬 User joined chat room: ${roomId}`);
     });
-
+// Leave a specific chat room
     socket.on("myEvent", (data) => {
       console.log("Received from client:", data);
       socket.emit("serverResponse", { message: "Hello from server!" });
@@ -55,7 +55,7 @@ export const initSocket = (server: http.Server) => {
     socket.on("typing", (roomId: string) => {
       socket.in(roomId).emit("typing");
     });
-
+// Stop typing indicator
     socket.on("stop typing", (roomId: string) => {
       socket.in(roomId).emit("stop typing");
     });
